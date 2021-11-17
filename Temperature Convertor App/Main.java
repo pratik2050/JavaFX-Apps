@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class TempApp extends Application {
+public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
@@ -63,7 +63,7 @@ public class TempApp extends Application {
         Alert alertDialog = new Alert(Alert.AlertType.INFORMATION);
         alertDialog.setTitle("My First Desktop Application");
         alertDialog.setHeaderText("Learning JavaFX");
-        alertDialog.setContentText("I am a NOOB in JAVA");
+        alertDialog.setContentText("Hi I am Pratik Das, creator of this Temperature Convertor tool, I am student at NIT Agartala");
 
         ButtonType yesBTN = new ButtonType("Yes");
         ButtonType noBTN = new ButtonType("No");
