@@ -1,4 +1,4 @@
-<h1> A simple temperature convertor App with JavaFX
+<h1> A simple temperature convertor App with JavaFX</h1>
   
   intellij vm module refrence path
   
