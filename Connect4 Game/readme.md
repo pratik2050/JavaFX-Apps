@@ -1,4 +1,4 @@
-#A connect4 game made with javaFX
+#A connect4 game made with javaFX#
 
 intellij vm module reference
 
