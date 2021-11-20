@@ -4,21 +4,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:id="rootGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #D9F7F0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pratik.connect4.Controller">
+<GridPane fx:id="rootGridPane" style="-fx-background-color: #D9F7F0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pratik.connect4.Controller">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="387.0" minWidth="10.0" prefWidth="387.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="213.0" />
+        <ColumnConstraints />
+        <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="192.4" minHeight="10.0" prefHeight="20.400000000000006" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="380.4" minHeight="10.0" prefHeight="380.4" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" />
+        <RowConstraints />
     </rowConstraints>
     <children>
-        <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" />
-      <Pane fx:id="insertedDiskPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
-      <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #2B3B4C;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Pane GridPane.columnSpan="2" />
+      <Pane fx:id="insertedDiskPane" prefHeight="400.0" prefWidth="200.0" GridPane.rowIndex="1" />
+      <VBox prefWidth="316.0" style="-fx-background-color: #2B3B4C;" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <Region prefHeight="200.0" prefWidth="214.0" VBox.vgrow="ALWAYS" />
             <Label fx:id="PlayerNameLabel" alignment="CENTER" prefHeight="43.0" prefWidth="308.0" text="Player One" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="29.0" />
