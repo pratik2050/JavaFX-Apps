@@ -1,5 +1,6 @@
 package com.pratik.connect4;
 
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -9,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,7 +28,9 @@ public class Controller implements Initializable {
     private static String playerOne = "Player One";
     private static String playerTwo = "Player Two";
 
-    private static final boolean isPlayerOneTurn = true;
+    private static boolean isPlayerOneTurn = true;
+
+    private Disk[][] insertedDiskArray = new Disk[Row][Column];
 
     @FXML
     public GridPane rootGridPane;
@@ -95,8 +99,42 @@ public class Controller implements Initializable {
         return rectangleList;
     }
 
-    private static void insertDisk(Disk disk, int column) {
+    private void insertDisk(Disk disk, int column) {
+        int row = Row - 1;
+        while (row > 0) {
+            if (insertedDiskArray[row][column] == null) {
+                break;
+            }
+            row--;
+        }
 
+        if (row < 0) {
+            return;
+        }
+
+        insertedDiskArray[row][column] = disk;
+        insertedDiskPane.getChildren().add(disk);
+
+        disk.setTranslateX(column * (Circle_Diameter + 5) + 3*(Circle_Diameter / 4));
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5),disk);
+        translateTransition.setToY(row * (Circle_Diameter + 5) + 3*(Circle_Diameter / 4));
+
+        int currentRow = row;
+        translateTransition.setOnFinished(actionEvent -> {
+            if(gameEnded(currentRow,column)) {
+                //end game
+            }
+
+            isPlayerOneTurn = !isPlayerOneTurn;
+            PlayerNameLabel.setText(isPlayerOneTurn? playerOne:playerTwo);
+        });
+
+        translateTransition.play();
+    }
+
+    private void gameEnded(int row, int column) {
+        
     }
 
     private static class Disk extends Circle {
