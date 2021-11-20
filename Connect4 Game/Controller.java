@@ -11,6 +11,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -39,6 +41,13 @@ public class Controller implements Initializable {
 
         Shape rectangleWithHoles = gameStructure();
         rootGridPane.add(rectangleWithHoles,0,1);
+
+        List<Rectangle> rectangleList = createClickableColumn();
+
+        for (Rectangle rectangle:rectangleList){
+            rootGridPane.add(rectangle,0,1);
+        }
+
     }
 
     private Shape gameStructure() {
@@ -63,9 +72,47 @@ public class Controller implements Initializable {
         return  rectangleWithHoles;
     }
 
+    private List<Rectangle> createClickableColumn() {
+
+        List<Rectangle> rectangleList = new ArrayList<>();
+
+        for (int col = 0; col < Column; col++) {
+            Rectangle rectangle = new Rectangle(Circle_Diameter,(Row + 1)*Circle_Diameter);
+            rectangle.setFill(Color.TRANSPARENT);
+            rectangle.setTranslateX(col * (Circle_Diameter + 5) + Circle_Diameter/4);
+
+            rectangle.setOnMouseEntered(mouseEvent -> rectangle.setFill(Color.valueOf("#eeeeee26")));
+            rectangle.setOnMouseExited(mouseEvent -> rectangle.setFill(Color.TRANSPARENT));
+
+            final int column = col;
+            rectangle.setOnMouseClicked(mouseEvent -> {
+                insertDisk(new Disk(isPlayerOneTurn), column);
+            });
+
+            rectangleList.add(rectangle);
+        }
+
+        return rectangleList;
+    }
+
+    private static void insertDisk(Disk disk, int column) {
+
+    }
+
+    private static class Disk extends Circle {
+        private final boolean isPlayerOneMove;
+
+        public Disk(boolean isPlayerOneMove) {
+            this.isPlayerOneMove = isPlayerOneMove;
+            setRadius(Circle_Diameter/2);
+            setFill(isPlayerOneMove? Color.valueOf(diskColor_1): Color.valueOf(diskColor_2));
+            setTranslateX(Circle_Diameter/2);
+            setTranslateY(Circle_Diameter/2);
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 }
-
