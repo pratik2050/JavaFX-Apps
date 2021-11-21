@@ -19,7 +19,7 @@ public class Main extends Application {
         GridPane rootGridPane = loader.load();
 
         controller = loader.getController();
-        controller.createRectangle();
+        controller.createPlayground();
 
         MenuBar menuBar = createMenu();
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
@@ -51,7 +51,6 @@ public class Main extends Application {
         MenuItem quitGame = new MenuItem("Quit");
         quitGame.setOnAction(actionEvent -> quitGame());
 
-
         fileMenu.getItems().addAll(newGame,resetGame,separatorMenuItem,quitGame);
 
         //Help Menu
@@ -65,7 +64,6 @@ public class Main extends Application {
 
         MenuItem aboutMe = new MenuItem("About Me");
         aboutMe.setOnAction(actionEvent -> aboutMe());
-
 
         helpMenu.getItems().addAll(aboutGame,separator,aboutMe);
 
@@ -89,7 +87,6 @@ public class Main extends Application {
         alert.setHeaderText("How to Play ???");
         alert.setContentText("First, decide who goes first and what color each player will have. Players must alternate turns, and only one disc can be dropped in each turn. On your turn, drop one of your colored discs from the top into any of the seven slots. The game ends when there is a 4-in-a-row or a stalemate. The starter of the previous game goes second on the next game.");
         alert.show();
-
     }
 
     private void quitGame() {
