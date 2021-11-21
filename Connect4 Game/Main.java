@@ -1,11 +1,8 @@
 package com.pratik.connect4;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;               // Game Made By Pratik Das
+import javafx.application.Platform;                         // Game Made By Pratik Das
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -44,10 +41,10 @@ public class Main extends Application {
 
         //File Menu Items
         MenuItem newGame = new MenuItem("New Game");
-        newGame.setOnAction(actionEvent -> resetGame());
+        newGame.setOnAction(actionEvent -> controller.resetGame());
 
         MenuItem resetGame = new MenuItem("Reset Game");
-        resetGame.setOnAction(actionEvent -> resetGame());
+        resetGame.setOnAction(actionEvent -> controller.resetGame());
 
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
 
@@ -99,11 +96,6 @@ public class Main extends Application {
         Platform.exit();
         System.exit(0);
     }
-
-    private void resetGame() {
-        //will be done
-    }
-
 
     public static void main(String[] args) {
         launch(args);
