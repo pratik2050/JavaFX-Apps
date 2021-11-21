@@ -1,9 +1,12 @@
 package com.pratik.connect4;
 
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -16,6 +19,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -42,6 +46,8 @@ public class Controller implements Initializable {
     @FXML
     public Label PlayerNameLabel;
 
+    private boolean isAllowedToInsert = true;
+
     public void createRectangle() {
 
         Shape rectangleWithHoles = gameStructure();
@@ -64,6 +70,7 @@ public class Controller implements Initializable {
                 circle.setRadius(Circle_Diameter / 2);
                 circle.setCenterX(Circle_Diameter/2);
                 circle.setCenterY(Circle_Diameter/2);
+                circle.setSmooth(true);
 
                 circle.setTranslateX(col * (Circle_Diameter + 5) + Circle_Diameter/4);
                 circle.setTranslateY(row * (Circle_Diameter + 5) + Circle_Diameter/4);
@@ -91,7 +98,10 @@ public class Controller implements Initializable {
 
             final int column = col;
             rectangle.setOnMouseClicked(mouseEvent -> {
-                insertDisk(new Disk(isPlayerOneTurn), column);
+                if (isAllowedToInsert) {
+                    isAllowedToInsert = false;
+                    insertDisk(new Disk(isPlayerOneTurn), column);
+                }
             });
 
             rectangleList.add(rectangle);
@@ -123,6 +133,8 @@ public class Controller implements Initializable {
 
         int currentRow = row;
         translateTransition.setOnFinished(actionEvent -> {
+
+            isAllowedToInsert = true;
             if(gameEnded(currentRow,column)) {
                 gameOver();
                 return;
@@ -185,7 +197,42 @@ public class Controller implements Initializable {
 
     private void gameOver() {
         String winner = isPlayerOneTurn? playerOne:playerTwo;
-        System.out.println(winner);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Connect4 - GameOver");
+        alert.setHeaderText("The Winner is " + winner);
+        alert.setContentText("Want to play again ???");
+
+        ButtonType yesBtn = new ButtonType("Yes");
+        ButtonType noBtn = new ButtonType("No, Exit");
+        alert.getButtonTypes().setAll(yesBtn,noBtn);
+
+        Platform.runLater(() -> {
+            Optional<ButtonType> btnClicked = alert.showAndWait();
+
+            if(btnClicked.isPresent() && btnClicked.get() == yesBtn) {
+                resetGame();
+            } else {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
+    }
+
+    public void resetGame() {
+        insertedDiskPane.getChildren().clear();
+
+        for (int row = 0; row < insertedDiskArray.length; row++) {
+            for (int col = 0; col < insertedDiskArray[row].length; col++) {
+                insertedDiskArray[row][col] = null;
+            }
+        }
+
+        isPlayerOneTurn = true;
+        PlayerNameLabel.setText("Player One");
+
+        createRectangle();
     }
 
     private static class Disk extends Circle {
