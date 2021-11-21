@@ -7,7 +7,7 @@
 <GridPane fx:id="rootGridPane" style="-fx-background-color: #D9F7F0;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pratik.connect4.Controller">
     <columnConstraints>
         <ColumnConstraints />
-        <ColumnConstraints />
+        <ColumnConstraints maxWidth="298.0" minWidth="225.0" prefWidth="225.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints minHeight="10.0" prefHeight="30.0" />
@@ -24,7 +24,7 @@
                   <Font name="System Bold" size="29.0" />
                </font>
             </Label>
-            <Label fx:id="Turn" alignment="CENTER" prefHeight="38.0" prefWidth="316.0" text="Label" textFill="WHITE">
+            <Label fx:id="Turn" alignment="CENTER" prefHeight="38.0" prefWidth="316.0" text="Turn" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="26.0" />
                </font></Label>
