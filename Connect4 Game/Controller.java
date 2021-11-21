@@ -4,10 +4,8 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.geometry.Point2D;                         // By Pratik Das
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -17,27 +15,24 @@ import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Controller implements Initializable {
 
-    private static final int Column = 7;
-    private static final int Row = 6;
-    private static final int Circle_Diameter = 80;
-    private static final String diskColor_1 = "#24303E";
+    private static final int COLUMN = 7;
+    private static final int ROW = 6;
+    private static final int CIRCLE_DIAMETER = 80;
+    private static final String diskColor_1 = "#24303E";        // final values
     private static final String diskColor_2 = "#4CAA88";
 
-    private static String playerOne = "Player One";
-    private static String playerTwo = "Player Two";
+    private static String playerOne;
+    private static String playerTwo;            // player names
 
     private static boolean isPlayerOneTurn = true;
 
-    private Disk[][] insertedDiskArray = new Disk[Row][Column];
+    private final Disk[][] insertedDiskArray = new Disk[ROW][COLUMN];
 
     @FXML
     public GridPane rootGridPane;
@@ -45,41 +40,55 @@ public class Controller implements Initializable {
     public Pane insertedDiskPane;
     @FXML
     public Label PlayerNameLabel;
+    @FXML
+    public TextField playerOneTextField, playerTwoTextField;
+    @FXML
+    public Button setNamesButton;
+    @FXML
+    public Label Turn;
 
     private boolean isAllowedToInsert = true;
 
-    public void createRectangle() {
+    public void createPlayground() {
+
+        setNamesButton.setOnAction(actionEvent -> {
+            playerOne = playerOneTextField.getText();
+            playerTwo = playerTwoTextField.getText();               // setting names
+            PlayerNameLabel.setText(playerOne);
+        });
 
         Shape rectangleWithHoles = gameStructure();
         rootGridPane.add(rectangleWithHoles,0,1);
 
         List<Rectangle> rectangleList = createClickableColumn();
 
-        for (Rectangle rectangle:rectangleList){
+        for (Rectangle rectangle:rectangleList){                        //rootGrid pane
             rootGridPane.add(rectangle,0,1);
         }
+
+
 
     }
 
     private Shape gameStructure() {
-        Shape rectangleWithHoles = new Rectangle((Column + 1)*Circle_Diameter,(Row + 1)*Circle_Diameter);
+        Shape rectangleWithHoles = new Rectangle((COLUMN + 1)* CIRCLE_DIAMETER,(ROW + 1)* CIRCLE_DIAMETER);
 
-        for (int row = 0; row <Row; row++) {
-            for (int col = 0; col < Column; col ++) {
+        for (int row = 0; row < ROW; row++) {
+            for (int col = 0; col < COLUMN; col ++) {
                 Circle circle = new Circle();
-                circle.setRadius(Circle_Diameter / 2);
-                circle.setCenterX(Circle_Diameter/2);
-                circle.setCenterY(Circle_Diameter/2);
+                circle.setRadius(40);
+                circle.setCenterX(40);               // creating circles
+                circle.setCenterY(40);
                 circle.setSmooth(true);
 
-                circle.setTranslateX(col * (Circle_Diameter + 5) + Circle_Diameter/4);
-                circle.setTranslateY(row * (Circle_Diameter + 5) + Circle_Diameter/4);
+                circle.setTranslateX(col * (CIRCLE_DIAMETER + 5) + 20);
+                circle.setTranslateY(row * (CIRCLE_DIAMETER + 5) + 20);          // adjusting position of circles
 
                 rectangleWithHoles = Shape.subtract(rectangleWithHoles, circle);
             }
         }
 
-        rectangleWithHoles.setFill(Color.WHITE);
+        rectangleWithHoles.setFill(Color.WHITE);                    // hollow circles
 
         return  rectangleWithHoles;
     }
@@ -88,18 +97,18 @@ public class Controller implements Initializable {
 
         List<Rectangle> rectangleList = new ArrayList<>();
 
-        for (int col = 0; col < Column; col++) {
-            Rectangle rectangle = new Rectangle(Circle_Diameter,(Row + 1)*Circle_Diameter);
+        for (int col = 0; col < COLUMN; col++) {
+            Rectangle rectangle = new Rectangle(CIRCLE_DIAMETER,(ROW + 1)* CIRCLE_DIAMETER);
             rectangle.setFill(Color.TRANSPARENT);
-            rectangle.setTranslateX(col * (Circle_Diameter + 5) + Circle_Diameter/4);
+            rectangle.setTranslateX(col * (CIRCLE_DIAMETER + 5) + 20);
 
-            rectangle.setOnMouseEntered(mouseEvent -> rectangle.setFill(Color.valueOf("#eeeeee26")));
+            rectangle.setOnMouseEntered(mouseEvent -> rectangle.setFill(Color.valueOf("#eeeeee26")));       //allowing player to insert disk
             rectangle.setOnMouseExited(mouseEvent -> rectangle.setFill(Color.TRANSPARENT));
 
             final int column = col;
             rectangle.setOnMouseClicked(mouseEvent -> {
                 if (isAllowedToInsert) {
-                    isAllowedToInsert = false;
+                    isAllowedToInsert = false;                              // make sure only one disk is allowed at a time
                     insertDisk(new Disk(isPlayerOneTurn), column);
                 }
             });
@@ -111,9 +120,9 @@ public class Controller implements Initializable {
     }
 
     private void insertDisk(Disk disk, int column) {
-        int row = Row - 1;
+        int row = ROW - 1;
         while (row >= 0) {
-            if (getDiskIfPresent(row, column) == null) {
+            if (getDiskIfPresent(row, column) == null) {        // code for inserting disk
                 break;
             }
             row--;
@@ -126,10 +135,10 @@ public class Controller implements Initializable {
         insertedDiskArray[row][column] = disk;
         insertedDiskPane.getChildren().add(disk);
 
-        disk.setTranslateX(column * (Circle_Diameter + 5) + 3*(Circle_Diameter / 4));
+        disk.setTranslateX(column * (CIRCLE_DIAMETER + 5) + 60);
 
-        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5),disk);
-        translateTransition.setToY(row * (Circle_Diameter + 5) + 3*(Circle_Diameter / 4));
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.5),disk);          //adjusting the inserted disk
+        translateTransition.setToY(row * (CIRCLE_DIAMETER + 5) + 60);                                           //adding animation while inserting disk
 
         int currentRow = row;
         translateTransition.setOnFinished(actionEvent -> {
@@ -160,8 +169,7 @@ public class Controller implements Initializable {
         Point2D startPoint2 = new Point2D(row - 3, column - 3);
         List<Point2D> diagonal2Points = IntStream.rangeClosed(0,6).mapToObj(i -> startPoint2.add(i, i)).collect(Collectors.toList());
 
-        boolean isEnded = checkCombinations(verticalPoints) || checkCombinations(horizontalPoints) || checkCombinations(diagonal1Points) || checkCombinations(diagonal2Points);
-        return isEnded;
+        return checkCombinations(verticalPoints) || checkCombinations(horizontalPoints) || checkCombinations(diagonal1Points) || checkCombinations(diagonal2Points);
     }
 
     private boolean checkCombinations(List<Point2D> points) {
@@ -171,7 +179,7 @@ public class Controller implements Initializable {
         for (Point2D point : points) {
             int rowIndexForArray = (int) point.getX();
             int columnIndexForArray = (int) point.getY();
-
+                                                                                                 // checking possible combinations
             Disk disk = getDiskIfPresent(rowIndexForArray, columnIndexForArray);
 
             if (disk != null && disk.isPlayerOneMove == isPlayerOneTurn) {
@@ -189,7 +197,7 @@ public class Controller implements Initializable {
 
     private Disk getDiskIfPresent(int row, int column) {
 
-        if (row >= Row || row < 0 || column >= Column || column < 0) {
+        if (row >= ROW || row < 0 || column >= COLUMN || column < 0) {
             return null;
         }
         return insertedDiskArray[row][column];
@@ -201,7 +209,7 @@ public class Controller implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Connect4 - GameOver");
         alert.setHeaderText("The Winner is " + winner);
-        alert.setContentText("Want to play again ???");
+        alert.setContentText("Want to play again ???");             //endgame gameOver code
 
         ButtonType yesBtn = new ButtonType("Yes");
         ButtonType noBtn = new ButtonType("No, Exit");
@@ -223,16 +231,15 @@ public class Controller implements Initializable {
     public void resetGame() {
         insertedDiskPane.getChildren().clear();
 
-        for (int row = 0; row < insertedDiskArray.length; row++) {
-            for (int col = 0; col < insertedDiskArray[row].length; col++) {
-                insertedDiskArray[row][col] = null;
-            }
+        for (Disk[] disks : insertedDiskArray) {
+            // reset and new game code
+            Arrays.fill(disks, null);
         }
 
         isPlayerOneTurn = true;
         PlayerNameLabel.setText("Player One");
 
-        createRectangle();
+        createPlayground();
     }
 
     private static class Disk extends Circle {
@@ -240,10 +247,10 @@ public class Controller implements Initializable {
 
         public Disk(boolean isPlayerOneMove) {
             this.isPlayerOneMove = isPlayerOneMove;
-            setRadius(Circle_Diameter/2);
-            setFill(isPlayerOneMove? Color.valueOf(diskColor_1): Color.valueOf(diskColor_2));
-            setTranslateX(Circle_Diameter/2);
-            setTranslateY(Circle_Diameter/2);
+            setRadius(40);
+            setFill(isPlayerOneMove? Color.valueOf(diskColor_1): Color.valueOf(diskColor_2));       // disk class
+            setTranslateX(40);
+            setTranslateY(40);
         }
     }
 
@@ -252,3 +259,5 @@ public class Controller implements Initializable {
 
     }
 }
+
+
